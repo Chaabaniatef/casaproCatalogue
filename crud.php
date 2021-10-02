@@ -1,29 +1,33 @@
 <?php
 /*
-Plugin Name: CRUD Application
-Plugin URI: https://github.com/iamersudip/Wordpress_CRUD_Plugin.git
-Description: A Plugin For WordPress CRUD ( Create, Read, Update & Delete ) Application Using Ajax & WP List Table
-Author: Sudip Kumar Paul
-Author URI: https://github.com/iamersudip
+Plugin Name: CasaproCatalogue
+Plugin URI: https://github.com/Chaabaniatef/casaproCatalogue.git
+Description: A Plugin For WordPress reseller ( Create, Read, Update & Delete ) Application Using Ajax & WP List Table
+Author: Atef Chaabani
+Author URI: https://github.com/Chaabaniatef
 Version: 1.0.0
 */
 
 global $wpdb;
-define('CRUD_PLUGIN_URL', plugin_dir_url( __FILE__ ));
-define('CRUD_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
+define('RESELLER_PLUGIN_URL', plugin_dir_url( __FILE__ ));
+define('RESELLER_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 
-register_activation_hook( __FILE__, 'activate_crud_plugin_function' );
-register_deactivation_hook( __FILE__, 'deactivate_crud_plugin_function' );
+register_activation_hook( __FILE__, 'activate_reseller_plugin_function' );
+register_deactivation_hook( __FILE__, 'deactivate_reseller_plugin_function' );
 
-function activate_crud_plugin_function() {
+function activate_reseller_plugin_function() {
   global $wpdb;
   $charset_collate = $wpdb->get_charset_collate();
-  $table_name = 'wp_crud';
+  $table_name = 'wp_reseller';
 
   $sql = "CREATE TABLE $table_name (
     `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-    `title` varchar(255),
-    `description` text,
+    `resellerRS` varchar(255),
+    `name` varchar(255),
+    `surname` varchar(255),
+    `mail` varchar(255),
+    `tel` varchar(255),
+    `passCatalogue` varchar(255),
     `created_at` varchar(255),
     `updated_at` varchar(255),
     PRIMARY KEY  (id)
@@ -33,33 +37,33 @@ function activate_crud_plugin_function() {
   dbDelta( $sql );
 }
 
-function deactivate_crud_plugin_function() {
+function deactivate_reseller_plugin_function() {
   global $wpdb;
-  $table_name = 'wp_crud';
+  $table_name = 'wp_reseller';
   $sql = "DROP TABLE IF EXISTS $table_name";
   $wpdb->query($sql);
 }
 
 function load_custom_css_js() {
-  wp_register_style( 'my_custom_css', CRUD_PLUGIN_URL.'/css/style.css', false, '1.0.0' );
+  wp_register_style( 'my_custom_css', RESELLER_PLUGIN_URL.'/css/style.css', false, '1.0.0' );
   wp_enqueue_style( 'my_custom_css' );
-  wp_enqueue_script( 'my_custom_script1', CRUD_PLUGIN_URL. '/js/custom.js' );
-  wp_enqueue_script( 'my_custom_script2', CRUD_PLUGIN_URL. '/js/jQuery.min.js' );
+  wp_enqueue_script( 'my_custom_script1', RESELLER_PLUGIN_URL. '/js/custom.js' );
+  wp_enqueue_script( 'my_custom_script2', RESELLER_PLUGIN_URL. '/js/jQuery.min.js' );
   wp_localize_script( 'my_custom_script1', 'ajax_var', array( 'ajaxurl' => admin_url('admin-ajax.php') ));
 }
 add_action( 'admin_enqueue_scripts', 'load_custom_css_js' );
 
-require_once(CRUD_PLUGIN_PATH.'/ajax/ajax_action.php');
+require_once(RESELLER_PLUGIN_PATH.'/ajax/ajax_action.php');
 
 add_action('admin_menu', 'my_menu_pages');
 function my_menu_pages(){
-    add_menu_page('CRUD', 'CRUD', 'manage_options', 'new-entry', 'my_menu_output' );
-    add_submenu_page('new-entry', 'CRUD Application', 'New Entry', 'manage_options', 'new-entry', 'my_menu_output' );
-    add_submenu_page('new-entry', 'CRUD Application', 'View Entries', 'manage_options', 'view-entries', 'my_submenu_output' );
+    add_menu_page('RESELLER', 'RESELLER', 'manage_options', 'new-entry', 'my_menu_output' );
+    add_submenu_page('new-entry', 'RESELLER Application', 'New Entry', 'manage_options', 'new-entry', 'my_menu_output' );
+    add_submenu_page('new-entry', 'RESELLER Application', 'View Entries', 'manage_options', 'view-entries', 'my_submenu_output' );
 }
 
 function my_menu_output() {
-  require_once(CRUD_PLUGIN_PATH.'/admin-templates/new_entry.php');
+  require_once(RESELLER_PLUGIN_PATH.'/admin-templates/new_entry.php');
 }
 
 if (!class_exists('WP_List_Table')) {
@@ -116,7 +120,7 @@ class EntryListTable extends WP_List_Table {
 
     function process_bulk_action() {
       global $wpdb;
-      $table_name = "wp_crud";
+      $table_name = "wp_reseller";
         if ('delete' === $this->current_action()) {
             $ids = isset($_REQUEST['id']) ? $_REQUEST['id'] : array();
             if (is_array($ids)) $ids = implode(',', $ids);
@@ -129,7 +133,7 @@ class EntryListTable extends WP_List_Table {
     function prepare_items() {
       global $wpdb,$current_user;
 
-      $table_name = "wp_crud";
+      $table_name = "wp_reseller";
 		  $per_page = 10;
       $columns = $this->get_columns();
       $hidden = array();

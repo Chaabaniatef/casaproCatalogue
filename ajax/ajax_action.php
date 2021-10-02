@@ -4,11 +4,11 @@ add_action('wp_ajax_nopriv_wqnew_entry', 'wqnew_entry_callback_function');
 
 function wqnew_entry_callback_function() {
   global $wpdb;
-  $wpdb->get_row( "SELECT * FROM `wp_crud` WHERE `title` = '".$_POST['wqtitle']."' AND `description` = '".$_POST['wqdescription']."' ORDER BY `id` DESC" );
+  $wpdb->get_row( "SELECT * FROM `wp_reseller` WHERE `mail` = '".$_POST['mail']." ORDER BY `id` DESC" );
   if($wpdb->num_rows < 1) {
-    $wpdb->insert("wp_crud", array(
-      "title" => $_POST['wqtitle'],
-      "description" => $_POST['wqdescription'],
+    $wpdb->insert("wp_reseller", array(
+      "resellerRS" => $_POST['resellerRS'],
+      "mail" => $_POST['mail'],
       "created_at" => time(),
       "updated_at" => time()
     ));
@@ -29,9 +29,9 @@ add_action('wp_ajax_nopriv_wqedit_entry', 'wqedit_entry_callback_function');
 
 function wqedit_entry_callback_function() {
   global $wpdb;
-  $wpdb->get_row( "SELECT * FROM `wp_crud` WHERE `title` = '".$_POST['wqtitle']."' AND `description` = '".$_POST['wqdescription']."' AND `id`!='".$_POST['wqentryid']."' ORDER BY `id` DESC" );
+  $wpdb->get_row( "SELECT * FROM `wp_reseller` WHERE `title` = '".$_POST['wqtitle']."' AND `description` = '".$_POST['wqdescription']."' AND `id`!='".$_POST['wqentryid']."' ORDER BY `id` DESC" );
   if($wpdb->num_rows < 1) {
-    $wpdb->update( "wp_crud", array(
+    $wpdb->update( "wp_reseller", array(
       "title" => $_POST['wqtitle'],
       "description" => $_POST['wqdescription'],
       "updated_at" => time()
