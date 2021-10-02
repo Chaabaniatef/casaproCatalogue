@@ -57,9 +57,9 @@ require_once(RESELLER_PLUGIN_PATH.'/ajax/ajax_action.php');
 
 add_action('admin_menu', 'my_menu_pages');
 function my_menu_pages(){
-    add_menu_page('RESELLER', 'RESELLER', 'manage_options', 'new-entry', 'my_menu_output' );
-    add_submenu_page('new-entry', 'RESELLER Application', 'New Entry', 'manage_options', 'new-entry', 'my_menu_output' );
-    add_submenu_page('new-entry', 'RESELLER Application', 'View Entries', 'manage_options', 'view-entries', 'my_submenu_output' );
+    add_menu_page('RESELLER', 'Revendeur', 'manage_options', 'new-entry', 'my_menu_output' );
+    add_submenu_page('new-entry', 'RESELLER Application', 'Nouveau', 'manage_options', 'new-entry', 'my_menu_output' );
+    add_submenu_page('new-entry', 'RESELLER Application', 'Liste revendeur', 'manage_options', 'view-entries', 'my_submenu_output' );
 }
 
 function my_menu_output() {
@@ -99,8 +99,11 @@ class EntryListTable extends WP_List_Table {
     function get_columns() {
       $columns = array(
         'cb' => '<input type="checkbox" />',
-			  'title'=> 'Title',
-        'description'=> 'Description',
+			  'resellerRS'=> 'Raison Social',
+        'name'=> 'Prénom responsable',
+        'surname'=> 'Nom responsable',
+        'mail'=> 'E-mail',
+        'tel'=> 'Téléphone',
         'action' => 'Action'
       );
       return $columns;
@@ -108,7 +111,7 @@ class EntryListTable extends WP_List_Table {
 
     function get_sortable_columns() {
       $sortable_columns = array(
-        'title' => array('title', true)
+        'resellerRS' => array('resellerRS', true)
       );
       return $sortable_columns;
     }
@@ -147,7 +150,7 @@ class EntryListTable extends WP_List_Table {
       $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'desc';
 
 		  if(isset($_REQUEST['s']) && $_REQUEST['s']!='') {
-        $this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name WHERE `title` LIKE '%".$_REQUEST['s']."%' OR `description` LIKE '%".$_REQUEST['s']."%' ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged * $per_page), ARRAY_A);
+        $this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name WHERE `resellerRS` LIKE '%".$_REQUEST['s']."%' OR `tel` LIKE '%".$_REQUEST['s']."%' OR `mail` LIKE '%".$_REQUEST['s']."%' OR `name` LIKE '%".$_REQUEST['s']."%' OR `surname` LIKE '%".$_REQUEST['s']."%' ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged * $per_page), ARRAY_A);
 		  } else {
 			  $this->items = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged * $per_page), ARRAY_A);
 		  }
@@ -171,7 +174,7 @@ function my_submenu_output() {
   ob_start();
 ?>
   <div class="wrap wqmain_body">
-    <h3>View Entries</h3>
+    <h3>Liste revendeur</h3>
     <?php echo $message; ?>
     <form id="entry-table" method="GET">
       <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>"/>
@@ -182,3 +185,9 @@ function my_submenu_output() {
   $wq_msg = ob_get_clean();
   echo $wq_msg;
 }
+
+// add_shortcode( 'casaproCatalogue', 'wpcasaproCatalogue_shortcode' );
+// function wpcasaproCatalogue_shortcode() {
+//     return 'hi!';
+// }
+
