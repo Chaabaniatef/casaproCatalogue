@@ -186,8 +186,17 @@ function my_submenu_output() {
   echo $wq_msg;
 }
 
-// add_shortcode( 'casaproCatalogue', 'wpcasaproCatalogue_shortcode' );
-// function wpcasaproCatalogue_shortcode() {
-//     return 'hi!';
-// }
+add_shortcode( 'casaproCatalogue', 'wpcasaproCatalogue_shortcode' );
+function wpcasaproCatalogue_shortcode() {
+  global $wpdb;
+  $wpdb->get_row( "SELECT * FROM `wp_reseller`" );
+
+  ob_start();
+
+  ?> 
+    <h1>ssss</h1> <?php echo $wpdb->num_rows ; ?>
+  <?php
+
+  return ob_get_clean();
+}
 
