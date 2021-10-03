@@ -57,7 +57,7 @@ require_once(RESELLER_PLUGIN_PATH.'/ajax/ajax_action.php');
 
 add_action('admin_menu', 'my_menu_pages');
 function my_menu_pages(){
-    add_menu_page('RESELLER', 'Revendeur', 'manage_options', 'new-entry', 'my_menu_output' );
+    add_menu_page('RESELLER', 'Revendeur', 'manage_options', 'new-entry', 'my_menu_output' ,'dashicons-groups',4);
     add_submenu_page('new-entry', 'RESELLER Application', 'Nouveau', 'manage_options', 'new-entry', 'my_menu_output' );
     add_submenu_page('new-entry', 'RESELLER Application', 'Liste revendeur', 'manage_options', 'view-entries', 'my_submenu_output' );
 }
@@ -186,17 +186,18 @@ function my_submenu_output() {
   echo $wq_msg;
 }
 
-add_shortcode( 'casaproCatalogue', 'wpcasaproCatalogue_shortcode' );
-function wpcasaproCatalogue_shortcode() {
-  global $wpdb;
-  $wpdb->get_row( "SELECT * FROM `wp_reseller`" );
+// add_shortcode( 'casaproCatalogue', 'wpcasaproCatalogue_shortcode' );
+// function wpcasaproCatalogue_shortcode() {
+//   global $wpdb;
+//   $wpdb->get_row( "SELECT * FROM `wp_reseller`" );
 
-  ob_start();
+//   ob_start();
 
   ?> 
-    <h1>ssss</h1> <?php echo $wpdb->num_rows ; ?>
+<?php //echo $wpdb->num_rows ;
+ ?>
   <?php
 
-  return ob_get_clean();
-}
+  // return ob_get_clean();
+//}
 
